@@ -4,7 +4,7 @@
 #
 Name     : libsigc++
 Version  : 3.2.0
-Release  : 19
+Release  : 20
 URL      : https://download.gnome.org/sources/libsigc++/3.2/libsigc++-3.2.0.tar.xz
 Source0  : https://download.gnome.org/sources/libsigc++/3.2/libsigc++-3.2.0.tar.xz
 Summary  : Typesafe signal and callback system for C++
@@ -61,7 +61,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1644879087
+export SOURCE_DATE_EPOCH=1664158879
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -82,8 +82,8 @@ meson test -C builddir --print-errorlogs
 
 %install
 mkdir -p %{buildroot}/usr/share/package-licenses/libsigc++
-cp %{_builddir}/libsigc++-3.2.0/COPYING %{buildroot}/usr/share/package-licenses/libsigc++/49d4c0ce1a16601f1e265d446b6c5ea6b512f27c
-cp %{_builddir}/libsigc++-3.2.0/docs/license.md %{buildroot}/usr/share/package-licenses/libsigc++/ef18bc4aa7f357a00c16d0dce2a81ca2a08b32ac
+cp %{_builddir}/libsigc++-%{version}/COPYING %{buildroot}/usr/share/package-licenses/libsigc++/49d4c0ce1a16601f1e265d446b6c5ea6b512f27c || :
+cp %{_builddir}/libsigc++-%{version}/docs/license.md %{buildroot}/usr/share/package-licenses/libsigc++/ef18bc4aa7f357a00c16d0dce2a81ca2a08b32ac || :
 DESTDIR=%{buildroot} ninja -C builddir install
 ## install_append content
 rm -f %{buildroot}/usr/share/doc/libsigc++-*/reference/html/structsigc_1_1type__trait_3_01T__type*
