@@ -4,10 +4,10 @@
 # Using build pattern: meson
 #
 Name     : libsigc++
-Version  : 3.4.0
-Release  : 22
-URL      : https://download.gnome.org/sources/libsigc++/3.4/libsigc++-3.4.0.tar.xz
-Source0  : https://download.gnome.org/sources/libsigc++/3.4/libsigc++-3.4.0.tar.xz
+Version  : 3.6.0
+Release  : 23
+URL      : https://download.gnome.org/sources/libsigc++/3.6/libsigc++-3.6.0.tar.xz
+Source0  : https://download.gnome.org/sources/libsigc++/3.6/libsigc++-3.6.0.tar.xz
 Summary  : Typesafe signal and callback system for C++
 Group    : Development/Tools
 License  : LGPL-3.0
@@ -55,25 +55,36 @@ license components for the libsigc++ package.
 
 
 %prep
-%setup -q -n libsigc++-3.4.0
-cd %{_builddir}/libsigc++-3.4.0
+%setup -q -n libsigc++-3.6.0
+cd %{_builddir}/libsigc++-3.6.0
+pushd ..
+cp -a libsigc++-3.6.0 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680039219
+export SOURCE_DATE_EPOCH=1696256719
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain   builddir
+CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CLEAR_INTERMEDIATE_FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CLEAR_INTERMEDIATE_CXXFLAGS="$CLEAR_INTERMEDIATE_CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS"
+CXXFLAGS="$CLEAR_INTERMEDIATE_CXXFLAGS"
+FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
+FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
+ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
+LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
+meson --libdir=lib64 --prefix=/usr --buildtype=plain   builddir
 ninja -v -C builddir
+CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 -O3" CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 " LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3" meson --libdir=lib64 --prefix=/usr --buildtype=plain   builddiravx2
+ninja -v -C builddiravx2
 
 %check
 export LANG=C.UTF-8
@@ -83,14 +94,30 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 meson test -C builddir --print-errorlogs
 
 %install
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CLEAR_INTERMEDIATE_FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CLEAR_INTERMEDIATE_CXXFLAGS="$CLEAR_INTERMEDIATE_CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS"
+CXXFLAGS="$CLEAR_INTERMEDIATE_CXXFLAGS"
+FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
+FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
+ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
+LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
 mkdir -p %{buildroot}/usr/share/package-licenses/libsigc++
 cp %{_builddir}/libsigc++-%{version}/COPYING %{buildroot}/usr/share/package-licenses/libsigc++/49d4c0ce1a16601f1e265d446b6c5ea6b512f27c || :
 cp %{_builddir}/libsigc++-%{version}/docs/license.md %{buildroot}/usr/share/package-licenses/libsigc++/ef18bc4aa7f357a00c16d0dce2a81ca2a08b32ac || :
+DESTDIR=%{buildroot}-v3 ninja -C builddiravx2 install
 DESTDIR=%{buildroot} ninja -C builddir install
 ## install_append content
 rm -f %{buildroot}/usr/share/doc/libsigc++-*/reference/html/structsigc_1_1type__trait_3_01T__type*
 
 ## install_append end
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -124,6 +151,7 @@ rm -f %{buildroot}/usr/share/doc/libsigc++-*/reference/html/structsigc_1_1type__
 /usr/include/sigc++-3.0/sigc++/member_method_trait.h
 /usr/include/sigc++-3.0/sigc++/reference_wrapper.h
 /usr/include/sigc++-3.0/sigc++/retype_return.h
+/usr/include/sigc++-3.0/sigc++/scoped_connection.h
 /usr/include/sigc++-3.0/sigc++/sigc++.h
 /usr/include/sigc++-3.0/sigc++/signal.h
 /usr/include/sigc++-3.0/sigc++/signal_base.h
@@ -143,6 +171,7 @@ rm -f %{buildroot}/usr/share/doc/libsigc++-*/reference/html/structsigc_1_1type__
 
 %files lib
 %defattr(-,root,root,-)
+/V3/usr/lib64/libsigc-3.0.so.0.0.0
 /usr/lib64/libsigc-3.0.so.0
 /usr/lib64/libsigc-3.0.so.0.0.0
 
